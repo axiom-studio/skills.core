@@ -51,4 +51,4 @@ This skill is automatically loaded by Atlas as a system skill when configured vi
 
 ## License
 
-Apache-2.0
+Proprietary - All rights reserved.

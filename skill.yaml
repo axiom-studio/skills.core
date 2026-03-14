@@ -8,7 +8,7 @@ metadata:
   author: "Axiom Studio"
   authorEmail: "engineering@axiomstudio.ai"
   version: 1.0.0
-  license: Apache-2.0
+  license: Proprietary
   category: core
   tags:
     - core
