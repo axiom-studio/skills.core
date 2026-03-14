@@ -1,0 +1,20 @@
+name: cron
+displayName: Schedule (Cron)
+category: trigger
+description: Trigger workflow on a cron schedule
+icon: cron
+sections:
+  - title: Schedule Configuration
+    collapsible: false
+    fields:
+      - key: expression
+        type: text
+        label: Cron Expression
+        placeholder: "0 */6 * * *"
+        hint: Cron expression for scheduling (e.g., "0 */6 * * *" for every 6 hours)
+        required: true
+      - key: timezone
+        type: text
+        label: Timezone
+        hint: Timezone for the cron schedule
+        default: UTC

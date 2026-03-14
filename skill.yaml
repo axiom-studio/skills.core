@@ -1,0 +1,82 @@
+apiVersion: axiom.studio/v1
+kind: Skill
+
+metadata:
+  id: core
+  name: "Core Agent Capabilities"
+  description: "Essential agent node types (HTTP, Code, AI, Data Operations, Communication)"
+  author: "Axiom Studio"
+  authorEmail: "engineering@axiomstudio.ai"
+  version: 1.0.0
+  license: Apache-2.0
+  category: core
+  tags:
+    - core
+    - http
+    - code
+    - ai
+    - data
+    - communication
+  icon: "https://axiomstudio.ai/icon.png"
+  color: "#4F46E5"
+
+spec:
+  executorType: plugin
+
+  nodeTypes:
+    # Triggers
+    - webhook
+    - webhook_response
+    - cron
+    - manual
+
+    # Control flow
+    - if
+    - switch
+    - delay
+    
+    # Data operations
+    - transform
+    - set
+    - merge
+    - filter
+    - sort
+    - aggregate
+    - split
+    - join
+    - loop
+    
+    # Actions
+    - http
+    - code
+    - ai
+    - pgvector
+    - invoke_agent
+    
+    # Communication
+    - slack
+    - discord
+    - teams
+    - email
+    
+    # Tools
+    - tool_pgvector
+    - tool_debug
+    - tool_memory
+  
+  plugin:
+    binary:
+      linux-amd64: executors/core-linux-amd64.so
+      darwin-arm64: executors/core-darwin-arm64.so
+  
+  dependencies:
+    standard:
+      - logger
+      - http-client
+      - k8s-client
+      - secrets
+  
+  permissions:
+    - http:*
+    - code:execute
+    - ai:*

@@ -1,0 +1,43 @@
+name: ai
+displayName: AI / LLM
+category: action
+description: Call AI/LLM models for intelligent operations
+icon: ai
+sections:
+  - title: Model Configuration
+    collapsible: false
+    fields:
+      - key: provider
+        type: text
+        label: Provider
+        hint: AI provider (openai, anthropic, etc.)
+        default: openai
+      - key: model
+        type: text
+        label: Model
+        hint: Model to use
+        default: gpt-4
+  - title: Prompt
+    collapsible: false
+    fields:
+      - key: prompt
+        type: textarea
+        label: Prompt
+        hint: Prompt to send to the AI
+        rows: 4
+  - title: Advanced Options
+    collapsible: true
+    defaultExpanded: false
+    fields:
+      - key: temperature
+        type: number
+        label: Temperature
+        hint: Sampling temperature (0.0 to 1.0)
+        default: 0.7
+        min: 0
+        max: 1
+      - key: maxTokens
+        type: number
+        label: Max Tokens
+        hint: Maximum tokens in response
+        default: 1000

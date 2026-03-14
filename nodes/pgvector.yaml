@@ -1,0 +1,123 @@
+name: pgvector
+displayName: PGVector Search
+category: action
+description: Semantic search using PostgreSQL pgvector
+icon: search
+sections:
+  - title: Search Configuration
+    collapsible: false
+    fields:
+      - key: query
+        type: textarea
+        label: Query
+        hint: Query text to search for
+        rows: 2
+        required: true
+      - key: operation
+        type: select
+        label: Operation
+        hint: Operation to perform
+        default: search
+        options:
+          - label: Search
+            value: search
+          - label: Insert
+            value: insert
+          - label: Upsert
+            value: upsert
+          - label: Delete
+            value: delete
+  - title: Database
+    collapsible: false
+    fields:
+      - key: connectionString
+        type: text
+        label: Connection String
+        hint: PostgreSQL connection string with pgvector
+        placeholder: postgresql://user:pass@host:5432/db
+        sensitive: true
+      - key: tableName
+        type: text
+        label: Table Name
+        hint: PostgreSQL table with pgvector
+        required: true
+      - key: vectorColumn
+        type: text
+        label: Vector Column
+        hint: Vector column name
+        default: embedding
+      - key: textColumn
+        type: text
+        label: Text Column
+        hint: Column containing text content (for insert)
+        default: content
+  - title: Embedding Configuration
+    collapsible: false
+    fields:
+      - key: embeddingProvider
+        type: select
+        label: Embedding Provider
+        hint: Provider for generating embeddings
+        default: openai
+        options:
+          - label: OpenAI
+            value: openai
+          - label: Cohere
+            value: cohere
+          - label: HuggingFace
+            value: huggingface
+          - label: Gemini
+            value: gemini
+          - label: Voyage
+            value: voyage
+          - label: OpenAI-Compatible
+            value: openai-compatible
+      - key: embeddingModel
+        type: text
+        label: Embedding Model
+        hint: Model name for embeddings
+        default: text-embedding-3-small
+        placeholder: text-embedding-3-small
+      - key: embeddingApiKey
+        type: text
+        label: API Key
+        hint: API key for embedding provider (or use environment variable)
+        sensitive: true
+      - key: embeddingBaseUrl
+        type: text
+        label: Base URL
+        hint: Custom base URL (optional, for self-hosted models)
+        placeholder: https://api.openai.com/v1
+  - title: Results
+    collapsible: false
+    fields:
+      - key: limit
+        type: number
+        label: Limit
+        hint: Maximum results to return
+        default: 10
+        min: 1
+        max: 1000
+  - title: Advanced Options
+    collapsible: true
+    defaultExpanded: false
+    fields:
+      - key: enableChunking
+        type: toggle
+        label: Enable Chunking
+        hint: Split large text into chunks before embedding
+        default: false
+      - key: chunkSize
+        type: number
+        label: Chunk Size
+        hint: Maximum characters per chunk
+        default: 1000
+        min: 100
+        max: 10000
+      - key: chunkOverlap
+        type: number
+        label: Chunk Overlap
+        hint: Overlap between chunks
+        default: 100
+        min: 0
+        max: 1000

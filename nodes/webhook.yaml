@@ -1,0 +1,61 @@
+name: webhook
+displayName: Webhook
+category: trigger
+description: Trigger workflow on incoming HTTP webhook requests
+icon: webhook
+sections:
+  - title: Endpoint Configuration
+    collapsible: false
+    fields:
+      - key: path
+        type: text
+        label: Webhook Path
+        placeholder: my-webhook
+        hint: Custom path for the webhook endpoint
+      - key: method
+        type: select
+        label: HTTP Method
+        hint: Allowed HTTP method for this webhook
+        default: POST
+        options:
+          - label: GET
+            value: GET
+          - label: POST
+            value: POST
+          - label: PUT
+            value: PUT
+          - label: DELETE
+            value: DELETE
+          - label: PATCH
+            value: PATCH
+  - title: Response Mode
+    collapsible: false
+    fields:
+      - key: responseMode
+        type: select
+        label: Response Mode
+        hint: How to respond to webhook caller
+        default: async
+        options:
+          - label: Async (immediate)
+            value: async
+          - label: Sync (wait for workflow)
+            value: sync
+      - key: timeout
+        type: number
+        label: Timeout (seconds)
+        hint: Maximum time to wait for sync response
+        default: 30
+        min: 1
+        max: 300
+        showIf:
+          field: responseMode
+          equals: sync
+  - title: Security
+    collapsible: false
+    fields:
+      - key: secret
+        type: text
+        label: Secret Token
+        hint: Optional secret token for webhook validation
+        sensitive: true

@@ -1,0 +1,37 @@
+name: tool_pgvector
+displayName: PGVector Tool
+category: tool
+description: Vector database operations tool
+icon: database
+sections:
+  - title: Operation
+    collapsible: false
+    fields:
+      - key: operation
+        type: select
+        label: Operation
+        hint: Operation to perform
+        default: insert
+        required: true
+        options:
+          - label: Insert
+            value: insert
+          - label: Search
+            value: search
+          - label: Delete
+            value: delete
+  - title: Database
+    collapsible: false
+    fields:
+      - key: tableName
+        type: text
+        label: Table Name
+        hint: PostgreSQL table with pgvector
+        required: true
+  - title: Data
+    collapsible: false
+    fields:
+      - key: data
+        type: json
+        label: Data
+        hint: Data to insert or search criteria

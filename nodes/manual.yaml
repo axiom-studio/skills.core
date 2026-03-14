@@ -1,0 +1,18 @@
+name: manual
+displayName: Manual Trigger
+category: trigger
+description: Trigger workflow manually on-demand
+icon: manual
+sections:
+  - title: Configuration
+    collapsible: false
+    fields:
+      - key: confirmation
+        type: toggle
+        label: Require Confirmation
+        hint: Require user confirmation before executing
+        default: false
+      - key: inputs
+        type: json
+        label: Input Parameters
+        hint: Optional input parameters for manual execution

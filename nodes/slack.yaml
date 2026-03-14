@@ -1,0 +1,26 @@
+name: slack
+displayName: Slack
+category: communication
+description: Send messages to Slack
+icon: slack
+sections:
+  - title: Channel
+    collapsible: false
+    fields:
+      - key: channel
+        type: text
+        label: Channel
+        hint: Slack channel ID or name
+        required: true
+  - title: Message
+    collapsible: false
+    fields:
+      - key: message
+        type: textarea
+        label: Message
+        hint: Message to send
+        rows: 3
+      - key: blocks
+        type: json
+        label: Blocks
+        hint: Slack block kit blocks for rich formatting

@@ -1,0 +1,36 @@
+name: code
+displayName: Code Execution
+category: action
+description: Execute Python code in isolated containers
+icon: code
+sections:
+  - title: Code Configuration
+    collapsible: false
+    fields:
+      - key: language
+        type: select
+        label: Language
+        hint: Programming language (python, javascript, etc.)
+        default: python
+        options:
+          - label: Python
+            value: python
+          - label: JavaScript
+            value: javascript
+          - label: TypeScript
+            value: typescript
+          - label: Go
+            value: go
+      - key: code
+        type: textarea
+        label: Code
+        hint: The code to execute
+        rows: 10
+  - title: Execution Options
+    collapsible: false
+    fields:
+      - key: timeout
+        type: number
+        label: Timeout
+        hint: Maximum execution time in seconds
+        default: 600

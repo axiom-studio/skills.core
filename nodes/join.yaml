@@ -1,0 +1,21 @@
+name: join
+displayName: Join
+category: data
+description: Join array items into a string
+icon: join
+sections:
+  - title: Input
+    collapsible: false
+    fields:
+      - key: items
+        type: json
+        label: Items
+        hint: Array of items to join
+  - title: Configuration
+    collapsible: false
+    fields:
+      - key: separator
+        type: text
+        label: Separator
+        hint: Separator to join with
+        default: ","
