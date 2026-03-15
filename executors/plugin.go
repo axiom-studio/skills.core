@@ -1,5 +1,3 @@
-//go:build plugin
-
 package main
 
 import (
