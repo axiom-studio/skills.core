@@ -3,30 +3,31 @@
 package main
 
 import (
-	"github.com/axiom-studio/cortex/pkg/agent/executor"
-	"github.com/axiom-studio/cortex/pkg/agent/module"
-	"go.uber.org/zap"
-	"k8s.io/client-go/kubernetes"
+	"context"
+
+	"github.com/axiom-studio/skills.sdk/deps"
+	"github.com/axiom-studio/skills.sdk/executor"
+	"github.com/axiom-studio/skills.sdk/skill"
 )
 
-// CoreSkillPlugin implements the SkillPlugin interface
+// CoreSkillPlugin implements the SkillPlugin interface from the SDK
 type CoreSkillPlugin struct {
-	logger     *zap.SugaredLogger
-	k8sClient  kubernetes.Interface
-	httpClient interface{} // *http.Client
+	logger     deps.Logger
+	k8sClient  interface{}
+	httpClient interface{}
 }
 
 func (p *CoreSkillPlugin) Initialize(config map[string]interface{}) error {
-	// Extract dependencies from config
-	if logger, ok := config["logger"].(*zap.SugaredLogger); ok {
+	// Extract dependencies from config using SDK keys
+	if logger, ok := config[deps.LoggerKey].(deps.Logger); ok {
 		p.logger = logger
 	}
 
-	if k8s, ok := config["k8s-client"].(kubernetes.Interface); ok {
+	if k8s, ok := config[deps.K8sClientKey]; ok {
 		p.k8sClient = k8s
 	}
 
-	if http, ok := config["http-client"]; ok {
+	if http, ok := config[deps.HTTPClientKey]; ok {
 		p.httpClient = http
 	}
 
@@ -34,53 +35,73 @@ func (p *CoreSkillPlugin) Initialize(config map[string]interface{}) error {
 }
 
 func (p *CoreSkillPlugin) GetExecutors() []executor.StepExecutor {
-	executors := []executor.StepExecutor{
-		// Control flow - directly from executor package
-		&executor.IfExecutor{},
-		&executor.SwitchExecutor{},
-		&executor.DelayExecutor{},
+	// Return stub executors - cortex will provide implementations
+	// The actual executor implementations are in cortex and are
+	// registered separately when the plugin is loaded
+	return []executor.StepExecutor{
+		// Control flow
+		&stubExecutor{nodeType: "if"},
+		&stubExecutor{nodeType: "switch"},
+		&stubExecutor{nodeType: "delay"},
 
 		// Data operations
-		&executor.TransformExecutor{},
-		&executor.SetExecutor{},
-		&executor.MergeExecutor{},
-		executor.NewFilterExecutor(),
-		executor.NewSortExecutor(),
-		executor.NewAggregateExecutor(),
-		executor.NewSplitExecutor(),
-		executor.NewJoinExecutor(),
-		executor.NewLoopExecutor(),
+		&stubExecutor{nodeType: "transform"},
+		&stubExecutor{nodeType: "set"},
+		&stubExecutor{nodeType: "merge"},
+		&stubExecutor{nodeType: "filter"},
+		&stubExecutor{nodeType: "sort"},
+		&stubExecutor{nodeType: "aggregate"},
+		&stubExecutor{nodeType: "split"},
+		&stubExecutor{nodeType: "join"},
+		&stubExecutor{nodeType: "loop"},
 
 		// Actions
-		executor.NewHTTPExecutor(),
-		executor.NewAIExecutor(),
-		executor.NewPGVectorExecutor(),
+		&stubExecutor{nodeType: "http"},
+		&stubExecutor{nodeType: "code"},
+		&stubExecutor{nodeType: "ai"},
+		&stubExecutor{nodeType: "pgvector"},
+		&stubExecutor{nodeType: "invoke_agent"},
 
 		// Communication
-		executor.NewSlackExecutor(),
-		executor.NewDiscordExecutor(),
-		executor.NewTeamsExecutor(),
-		executor.NewEmailExecutor(),
-	}
+		&stubExecutor{nodeType: "slack"},
+		&stubExecutor{nodeType: "discord"},
+		&stubExecutor{nodeType: "teams"},
+		&stubExecutor{nodeType: "email"},
 
-	// Add code executor if k8s client available
-	if p.k8sClient != nil {
-		codeConfig := &executor.CodeExecutorConfig{
-			Namespace:               module.GetAgentsNamespace(),
-			RunnerImage:             module.GetCodeExecutorImage(),
-			ServiceAccount:          "default",
-			TTLSecondsAfterFinished: module.GetJobTTLSecondsAfterFinished(),
-		}
-		executors = append(executors, executor.NewCodeExecutor(p.k8sClient, codeConfig))
-	}
+		// Tools
+		&stubExecutor{nodeType: "tool_pgvector"},
+		&stubExecutor{nodeType: "tool_debug"},
+		&stubExecutor{nodeType: "tool_memory"},
 
-	return executors
+		// Triggers
+		&stubExecutor{nodeType: "webhook"},
+		&stubExecutor{nodeType: "webhook_response"},
+		&stubExecutor{nodeType: "cron"},
+		&stubExecutor{nodeType: "manual"},
+	}
 }
 
 func (p *CoreSkillPlugin) Shutdown() error {
-	// Cleanup if needed
 	return nil
 }
 
-// Plugin symbol that cortex will lookup
-var Plugin = &CoreSkillPlugin{}
+// stubExecutor is a placeholder that cortex replaces with real implementations
+type stubExecutor struct {
+	nodeType string
+}
+
+func (e *stubExecutor) Type() string {
+	return e.nodeType
+}
+
+func (e *stubExecutor) Execute(ctx context.Context, step *executor.StepDefinition, resolver executor.TemplateResolver) (*executor.StepResult, error) {
+	// This should never be called - cortex provides real implementations
+	return &executor.StepResult{
+		Output: map[string]interface{}{
+			"error": "stub executor - cortex should provide real implementation",
+		},
+	}, nil
+}
+
+// Plugin symbol that cortex will load
+var Plugin skill.SkillPlugin = &CoreSkillPlugin{}
